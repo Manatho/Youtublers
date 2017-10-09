@@ -1,0 +1,24 @@
+{
+  "name": "youtublers",
+  "version": "1.0.0",
+  "description": "Where peoplers can subscribbs to chanslers",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manatho/Youtublers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manatho/Youtublers/issues"
+  },
+  "homepage": "https://github.com/Manatho/Youtublers#readme",
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.11.0"
+  }
+}
