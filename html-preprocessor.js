@@ -52,8 +52,9 @@ class HtmlPreprocessor {
     }
     
     static process(html, replaceTagWith) {
-        html = HtmlPreprocessor.variableInjection(html, replaceTagWith);
         html = HtmlPreprocessor.fileInjection(html);
+        html = HtmlPreprocessor.variableInjection(html, replaceTagWith);
+        return html;
     }
 }
 module.exports = HtmlPreprocessor;

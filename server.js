@@ -7,18 +7,16 @@ var fs = require('fs');
 var app = new TinyRouter();
 
 app.get('/home', function(request){
-    return showPage('./pages/home.html');
+    return showPage('./pages/home.html', {'Fisk': 'FUCKING OP'});
 });
 
 
-function showPage(path){
+function showPage(path, vars){
     var file = fs.readFileSync(path);
     file = file.toString();
-    file = HtmlPreprocessor.fileInjection(file);
-    
+    file = HtmlPreprocessor.process(file, vars);
     return file; 
 
-    return result;
 }
 
 
