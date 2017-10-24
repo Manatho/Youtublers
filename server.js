@@ -1,3 +1,5 @@
+
+var HtmlPreprocessor = require('./html-preprocessor.js');
 let TinyRouter = require('./tiny-router.js');
 var http = require('http');
 var fs = require('fs');
@@ -5,13 +7,16 @@ var fs = require('fs');
 var app = new TinyRouter();
 
 app.get('/home', function(request){
-    return showPage('./pages/home.html');
+    return showPage('./pages/home.html', {'Fisk': 'FUCKING OP'});
 });
 
 
-function showPage(path){
-    return fs.readFileSync(path);
-    return result;
+function showPage(path, vars){
+    var file = fs.readFileSync(path);
+    file = file.toString();
+    file = HtmlPreprocessor.process(file, vars);
+    return file; 
+
 }
 
 

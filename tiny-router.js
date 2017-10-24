@@ -19,7 +19,7 @@ class TinyRouter{
             var req = url.parse(request.url, true);            
             console.log('[INFO]\t\''+req.pathname+'\' requested');
             if(router.getRoutes[req.pathname] != undefined){
-
+                
                 response.writeHead(200, {"Content-Type": "text/html"});
                 response.write(router.getRoutes[req.pathname](request));
                 response.end();
