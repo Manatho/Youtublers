@@ -1,3 +1,6 @@
+var http = require('http');
+var url = require('url');
+
 class TinyRouter{
 
     constructor(){
@@ -7,8 +10,21 @@ class TinyRouter{
     }
 
     listen(port){
-        //TODO:
-        //  Listen on port, and return the result of the correct function, depending on the request.
+
+        var router = this;
+
+        http.createServer(function(request, response){
+            var req = url.parse(request.url, true);
+
+            if(router.getRoutes[req.pathname] != undefined){
+                response.writeHead(200, {"Content-Type": "text/html"});
+                response.write(router.getRoutes[req.pathname](request));
+                response.end();
+                console.log('[INFO]\t\''+req.pathname+'\' requested');
+            }
+
+
+        }).listen(port);
     }
 
     get(route, handler) {
