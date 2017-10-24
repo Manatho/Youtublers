@@ -19,6 +19,7 @@
   "dependencies": {
     "bootstrap": "^4.0.0-beta",
     "jquery": "^3.2.1",
+    "mime": "^2.0.3",
     "popper.js": "^1.11.0"
   }
 }
