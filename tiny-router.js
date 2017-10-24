@@ -1,7 +1,5 @@
 var http = require('http');
 var url = require('url');
-var fs = require('fs');
-var mime = require('mime');
 
 class TinyRouter{
 
@@ -16,27 +14,13 @@ class TinyRouter{
         var router = this;
 
         http.createServer(function(request, response){
-            var req = url.parse(request.url, true);            
-            console.log('[INFO]\t\''+req.pathname+'\' requested');
-            if(router.getRoutes[req.pathname] != undefined){
+            var req = url.parse(request.url, true);
 
+            if(router.getRoutes[req.pathname] != undefined){
                 response.writeHead(200, {"Content-Type": "text/html"});
                 response.write(router.getRoutes[req.pathname](request));
                 response.end();
-            }else{
-                var filepath = './public'+req.pathname;                
-                if(fs.existsSync(filepath)){
-                    var type = mime.getType(filepath); //mime.lookup('./public'+req.pathname);
-                    if (!response.getHeader('content-type')) {
-                        response.setHeader('Content-Type', type);
-                        console.log(type);
-                        response.write(fs.readFileSync(filepath));
-                        response.end();
-                    }
-                }else{
-                    response.writeHead(404, "Page or Resource not found. 404");
-                    response.end();
-                }
+                console.log('[INFO]\t\''+req.pathname+'\' requested');
             }
 
 

@@ -1,3 +1,5 @@
+
+var HtmlPreprocessor = require('./html-preprocessor.js');
 let TinyRouter = require('./tiny-router.js');
 var http = require('http');
 var fs = require('fs');
@@ -10,7 +12,12 @@ app.get('/home', function(request){
 
 
 function showPage(path){
-    return fs.readFileSync(path);
+    var file = fs.readFileSync(path);
+    file = file.toString();
+    file = HtmlPreprocessor.fileInjection(file);
+    
+    return file; 
+
     return result;
 }
 
