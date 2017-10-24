@@ -5,10 +5,6 @@ var fs = require('fs');
 var app = new TinyRouter();
 
 app.get('/home', function(request){
-    return "HOMEPAGE";
-});
-
-app.get('/lol', function(request){
     return showPage('./pages/home.html');
 });
 
