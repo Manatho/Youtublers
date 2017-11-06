@@ -57,7 +57,6 @@ class HtmlPreprocessor {
     }
 
     static foreachInjection(html, inputVariables){
-        console.log(html.length, inputVariables);
         var $ = cheerio.load(html);
         // console.log($('foreach').attr('key'));
 
