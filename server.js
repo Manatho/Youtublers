@@ -1,8 +1,14 @@
 
+var DB = require('./database.js');
 var HtmlPreprocessor = require('./html-preprocessor.js');
 let TinyRouter = require('./tiny-router.js');
 var http = require('http');
 var fs = require('fs');
+
+DB.initialize();
+DB.createVideo('10 hours of Cats', 'CAAAAAAATZZZZZZZZZZZZZZZ');
+
+console.log(DB.videos());
 
 var app = new TinyRouter();
 
