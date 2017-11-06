@@ -17,7 +17,7 @@ class TinyRouter{
 
         http.createServer(function(request, response){
             var req = url.parse(request.url, true);            
-            console.log('[INFO]\t\''+req.pathname+'\' requested');
+            // console.log('[INFO]\t\''+req.pathname+'\' requested');
             if(router.getRoutes[req.pathname] != undefined){
                 
                 response.writeHead(200, {"Content-Type": "text/html"});
@@ -29,7 +29,7 @@ class TinyRouter{
                     var type = mime.getType(filepath); //mime.lookup('./public'+req.pathname);
                     if (!response.getHeader('content-type')) {
                         response.setHeader('Content-Type', type);
-                        console.log(type);
+                        // console.log(type);
                         response.write(fs.readFileSync(filepath));
                         response.end();
                     }
