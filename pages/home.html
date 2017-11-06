@@ -16,11 +16,10 @@
         </div>
 
         <foreach key="person" in="people" tag="div">
-            <h5>{{person.name}} likes {{person.hobbies}}</h5>
-        </foreach>
-
-        <foreach key="person" in="people" tag="div">
-            <h5>{{person.name}} hates nothing</h5>
+            <b>{{person.name}} likes</b>
+            <foreach key="hobby" in="person.hobbies" tag="ul">
+                <li>{{hobby}}</li>
+            </foreach>
         </foreach>
 
 

@@ -57,6 +57,7 @@ class HtmlPreprocessor {
     }
 
     static foreachInjection(html, inputVariables){
+        console.log(html.length, inputVariables);
         var $ = cheerio.load(html);
         // console.log($('foreach').attr('key'));
 
@@ -67,7 +68,7 @@ class HtmlPreprocessor {
               }
         ).each((index, element) => {
             var key = element.attribs.key;
-            var list = inputVariables[element.attribs.in];
+            var list = HtmlPreprocessor.getNestedValue(inputVariables, element.attribs.in);
             var tag = element.attribs.tag;
 
             var newElement = $('<'+tag+'><'+tag+'/>');
@@ -78,7 +79,7 @@ class HtmlPreprocessor {
                 list.forEach((item) => {
                     var loopList = {};
                     loopList[key] = item;
-                    newElement.append(HtmlPreprocessor.variableInjection(children, loopList));
+                    newElement.append(HtmlPreprocessor.variableInjection(HtmlPreprocessor.foreachInjection(children, loopList), loopList));
                 });
             }
 
