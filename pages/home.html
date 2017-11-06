@@ -14,6 +14,12 @@
                         <h4 style="text-align:center;">Where peoplers can subscribbs to chanslers</h4>
                     </div>
         </div>
+        <ul>
+        @foreach(person in people)
+            <li>{{person.name}} : {{person.age}} </li>
+        @endforeach
+        </ul>
+
     @include(./components/DivAmazing.html)
 </body>
 </html>
