@@ -6,13 +6,10 @@ var http = require('http');
 var fs = require('fs');
 
 DB.initialize();
-DB.createVideo('10 hours of Cats', 'CAAAAAAATZZZZZZZZZZZZZZZ');
-
-console.log(DB.videos());
 
 var app = new TinyRouter();
 
-app.get('/home', function(request){
+app.get('/home', (request) => {
     return showPage('./pages/home.html', {
         'Fisk': 'FUCKING OP',
         people: [
@@ -20,8 +17,14 @@ app.get('/home', function(request){
             {name: 'Jack Sparrow', age: Math.floor(Math.random() * 60), hobbies: ['pirating', 'rum'] },
             {name: 'Bond, James Bond', age: Math.floor(Math.random() * 60), hobbies: ['martini', 'shaken'] },
             {name: 'Rick Sanchez', age: Math.floor(Math.random() * 60), hobbies: ['himself', 'not life'] },
-        ]
+        ],
+        videos: DB.videos()
     });
+});
+
+app.get('/createTestVideo', (request, params) => {
+    var id = DB.createVideo(params.title, params.description);
+    return showPage('./pages/debug.html', {debug: 'Created video:\tid:' + id + '\ttitle:' + params.title + '\tdescription:' + params.description});
 });
 
 function showPage(path, vars){
@@ -31,7 +34,5 @@ function showPage(path, vars){
     return file; 
 
 }
-
-
 
 app.listen(8080);

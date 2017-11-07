@@ -15,11 +15,13 @@
                     </div>
         </div>
 
-        <foreach key="person" in="people" tag="div">
-            <b>{{person.name}} likes</b>
-            <foreach key="hobby" in="person.hobbies" tag="ul">
-                <li>{{hobby}}</li>
-            </foreach>
+
+        <foreach key="video" in="videos" tag="div">
+            <ul>
+                <li>{{video.id}}</li>
+                <li>{{video.title}}</li>
+                <li>{{video.description}}</li>
+            </ul>
         </foreach>
 
 

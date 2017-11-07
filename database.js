@@ -1,24 +1,20 @@
-const sqlite3 = require('sqlite3').verbose();
+const sql = require('sqlite-sync');
 const shortid = require('shortid');
 
-const db = new sqlite3.Database('./db/youtublers.db', (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to the database.');
-  });
+const dbfile = './db/youtublers.db';
 
 class DB{
 
     static initialize(){
-        db.run(`
+        sql.connect(dbfile);
+        sql.run(`
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username varchar(50) NOT NULL UNIQUE,
             password varchar(255) NOT NULL
             );
         `);
-        db.run(`
+        sql.run(`
         CREATE TABLE IF NOT EXISTS videos (
             id varchar(8) NOT NULL PRIMARY KEY,
             title varchar(50) NOT NULL,
@@ -26,44 +22,35 @@ class DB{
             user_id INTEGER NOT NULL
             );
         `);
+        sql.close();
     }
 
     static users(){
-        var array = [];
-        db.each('SELECT * FROM users', (err, row) => {
-            array.push(row);
-        });
-        return array;
+        sql.connect(dbfile);
+        var rows = sql.run('SELECT * FROM users');
+        sql.close();
+        return rows;
     }
 
     static createUser(username, password){
-        var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
-        stmt.run(username, password);
-        stmt.finalize();
-        return id;
+        sql.connect(dbfile);
+        sql.run("INSERT INTO users VALUES (?, ?)", [username, password]);
+        sql.close();
     }
 
     static videos(){
-        var vids = [];
-        db.all('SELECT * FROM videos', (err, rows) => {
-            return rows;
-        });
+        sql.connect(dbfile);
+        var rows = sql.run('SELECT * FROM videos');
+        sql.close();
+        return rows;
     }
 
     static createVideo(title, description){
         var id = shortid.generate();
-        db.serialize(() => {
-            var stmt = db.prepare("INSERT INTO videos VALUES (?, ?, ?)");
-            stmt.run(id, title, description);
-            stmt.finalize();
-        });
+        sql.connect(dbfile);
+        sql.run("INSERT INTO videos VALUES (?, ?, ?)", [id, title, description]);
+        sql.close();
         return id;
-    }
-
-    
-
-    static close(){
-        db.close();
     }
 
 }
