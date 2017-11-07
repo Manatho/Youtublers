@@ -16,20 +16,19 @@ class TinyRouter{
         var router = this;
 
         http.createServer(function(request, response){
-            var req = url.parse(request.url, true);            
+            var req = url.parse(request.url, true);
             // console.log('[INFO]\t\''+req.pathname+'\' requested');
             if(router.getRoutes[req.pathname] != undefined){
                 
                 response.writeHead(200, {"Content-Type": "text/html"});
-                response.write(router.getRoutes[req.pathname](request));
+                response.write(router.getRoutes[req.pathname](request, req.query));
                 response.end();
             }else{
                 var filepath = './public'+req.pathname;                
                 if(fs.existsSync(filepath)){
-                    var type = mime.getType(filepath); //mime.lookup('./public'+req.pathname);
+                    var type = mime.getType(filepath);
                     if (!response.getHeader('content-type')) {
                         response.setHeader('Content-Type', type);
-                        // console.log(type);
                         response.write(fs.readFileSync(filepath));
                         response.end();
                     }
