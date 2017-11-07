@@ -15,15 +15,18 @@
                     </div>
         </div>
 
+        
+        
         <foreach key="person" in="people" tag="div">
-            <b>{{person.name}} likes</b>
+            <b><var>person.name</var> likes</b>
+            
             <foreach key="hobby" in="person.hobbies" tag="ul">
-                <li>{{hobby}}</li>
+                
+                <li><var>hobby</var></li>
             </foreach>
         </foreach>
 
 
-        <include file=""/>
-    @include(./components/DivAmazing.html)
+        <import file="./components/DivAmazing.html"></import>
 </body>
 </html>

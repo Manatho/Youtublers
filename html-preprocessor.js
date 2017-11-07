@@ -14,17 +14,13 @@ class HtmlPreprocessor {
         In html replaces strings of the form, {{tag}} with replacement text
     */
     static variableInjection(html, inputVariables) {
-        var reg = /{{+([\w\d]+(\.?))+}}/g;
-        var matches = html.match(reg);
+        var $ = cheerio.load(html);
 
-        if(matches != null)
-        for(let i = 0; i < matches.length; i++){
-            var key = matches[i];
-            html = html.replace(key, HtmlPreprocessor.getNestedValue(inputVariables, key.replace('{{', '').replace('}}', '')));
-        }
-
-        // }
-        return html;
+        $('var').each((index,element) => {
+                $(element).replaceWith(HtmlPreprocessor.getNestedValue(inputVariables, $(element).html()));
+        });
+        
+        return $.html();
     }
 
 
@@ -36,24 +32,21 @@ class HtmlPreprocessor {
 
     */
     static fileInjection(html) {
-        var reg = /@include\([^) ]+\)/g;
-        while (true) {
-            var match = reg.exec(html);
-            if (match != null)
+        var $ = cheerio.load(html);
+
+        $('test').each((index,element) =>{
+            var fileName = element.attribs.file;
+            if(fs.existsSync(fileName))
             {
-                var fileName =match[0].slice(9,match[0].length-1);
-                if(fs.existsSync(fileName))
-                {
-                    var file = fs.readFileSync(fileName);
-                    html = html.replace(match[0], file);
-                }
-                else
-                    throw("File: '" + fileName + "' not found!")
+                var file = fs.readFileSync(fileName);
+                $(element).replaceWith(file.toString());
             }
             else
-                break;
-        }
-        return html;
+            throw("File: '" + fileName + "' not found!")
+
+        })
+
+        return $.html();
     }
 
     static foreachInjection(html, inputVariables){
