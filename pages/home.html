@@ -11,7 +11,7 @@
 <body>
 
 
-    @include(./components/NavBar.html)
+    <import file="./components/NavBar.html"></import>
 
 
     <div class="container">
@@ -20,13 +20,14 @@
         </div>
         <div class="container-background">
             <foreach key="video" in="videos" tag="div">
-                        @include(./components/VideoResult.html)
+                <var>video.user</var>
+                <import file="./components/VideoResult.html"></import>
             </foreach>
         </div>
     </div>
 
 
-    @include(./components/DivAmazing.html)
+        <import file="./components/DivAmazing.html"></import>
 </body>
 
 </html>

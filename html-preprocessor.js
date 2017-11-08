@@ -11,20 +11,17 @@ class HtmlPreprocessor {
             value: replacement text
         @return string containing the changed html
 
-        In html replaces strings of the form, {{tag}} with replacement text
+        In html replaces the tag <var>tag</var> with the replacement text
     */
     static variableInjection(html, inputVariables) {
-        var reg = /{{+([\w\d]+(\.?))+}}/g;
-        var matches = html.match(reg);
+        var $ = cheerio.load(html);
 
-        if(matches != null)
-        for(let i = 0; i < matches.length; i++){
-            var key = matches[i];
-            html = html.replace(key, HtmlPreprocessor.getNestedValue(inputVariables, key.replace('{{', '').replace('}}', '')));
-        }
-
-        // }
-        return html;
+        $('var').each((index,element) => {
+                var temp = HtmlPreprocessor.getNestedValue(inputVariables, $(element).html());
+                $(element).replaceWith(temp.toString());
+        });
+        
+        return $.html();
     }
 
 
@@ -32,28 +29,25 @@ class HtmlPreprocessor {
         @html: html page as a string
         @return string containing the changed html
 
-        Injects 
+        Replaces <import file="filename"></import> with the text files content
 
     */
     static fileInjection(html) {
-        var reg = /@include\([^) ]+\)/g;
-        while (true) {
-            var match = reg.exec(html);
-            if (match != null)
+        var $ = cheerio.load(html);
+
+        $('import').each((index,element) =>{
+            var fileName = element.attribs.file;
+            if(fs.existsSync(fileName))
             {
-                var fileName =match[0].slice(9,match[0].length-1);
-                if(fs.existsSync(fileName))
-                {
-                    var file = fs.readFileSync(fileName);
-                    html = html.replace(match[0], file);
-                }
-                else
-                    throw("File: '" + fileName + "' not found!")
+                var file = fs.readFileSync(fileName);
+                $(element).replaceWith(file.toString());
             }
             else
-                break;
-        }
-        return html;
+            throw("File: '" + fileName + "' not found!")
+
+        })
+
+        return $.html();
     }
 
     static foreachInjection(html, inputVariables){
