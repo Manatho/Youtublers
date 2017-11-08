@@ -6,7 +6,7 @@ var http = require('http');
 var fs = require('fs');
 
 DB.initialize();
-console.log("Database structure:\n",DB.tables());
+console.log("Database structure:\n",DB.videos());
 
 var app = new TinyRouter();
 

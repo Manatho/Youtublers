@@ -18,7 +18,7 @@ class HtmlPreprocessor {
 
         $('var').each((index,element) => {
                 var temp = HtmlPreprocessor.getNestedValue(inputVariables, $(element).html());
-                $(element).replaceWith(temp.toString());
+                if(temp != undefined) $(element).replaceWith(temp.toString());
         });
         
         return $.html();
