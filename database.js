@@ -29,7 +29,7 @@ class DB{
             id integer PRIMARY KEY AUTOINCREMENT,
             user_id integer NOT NULL,
             content varchar(512) NOT NULL,
-            parent_comment INTEGER NOT NULL,
+            parent_comment INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -48,6 +48,14 @@ class DB{
             subscription_user_id integer NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (user_id, subscription_user_id)
+            );
+        `);
+        sql.run(`
+        CREATE TABLE IF NOT EXISTS views (
+            user_id integer NOT NULL,
+            video_id varchar(8) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (user_id, video_id)
             );
         `);
         sql.close();
@@ -73,25 +81,29 @@ class DB{
         return rows;
     }
 
-    static createVideo(title, description){
+    static createVideo(title, description, user_id){
         var id = shortid.generate();
         sql.connect(dbfile);
-        sql.run("INSERT INTO videos VALUES (?, ?, ?)", [id, title, description]);
+        sql.run("INSERT INTO videos (id, title, description, user_id) VALUES (?, ?, ?, ?)", [id, title, description, user_id]);
         sql.close();
         return id;
     }
 
     static comments(video_id){
         sql.connect(dbfile);
-        var rows = sql.run('SELECT * FROM comments WHERE video_id = ?', [video_id]);
+        var rows = sql.run('SELECT * FROM comments WHERE video_id = ? AND parent_comment = NULL', [video_id]);
         sql.close();
         return rows;
     }
 
-    static createComment(title, description){
+    static createComment(user_id, content, parent_comment = undefined){
         var id = shortid.generate();
         sql.connect(dbfile);
-        sql.run("INSERT INTO videos VALUES (?, ?, ?)", [id, title, description]);
+        if(parent_comment == undefined){
+            sql.run("INSERT INTO comments(user_id, content, parent_comment) VALUES (?, ?, ?)", [user_id, content, parent_comment]);
+        }else{
+            sql.run("INSERT INTO comments(user_id, content) VALUES (?, ?)", [user_id, title]);
+        }
         sql.close();
         return id;
     }
@@ -120,6 +132,13 @@ class DB{
         sql.connect(dbfile);
         sql.run("INSERT INTO subscriptions VALUES (?, ?)", [user_id, subscription_user_id]);
         sql.close();
+    }
+
+    static tables(){
+        sql.connect(dbfile);
+        var tables = sql.run("SELECT name FROM sqlite_master WHERE type='table';");
+        sql.close();
+        return tables;
     }
 
 }
