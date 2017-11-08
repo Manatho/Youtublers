@@ -56,10 +56,18 @@ class HtmlPreprocessor {
         return html;
     }
 
+    /*
+        @html: html page as a string
+        @inputVariables: Associative array
+            key: tag
+            value: replacement text
+        @return string containing the changed html
+
+        Parses html and repeats everything within <foreach></foreach> tags
+    */
     static foreachInjection(html, inputVariables){
         var $ = cheerio.load(html);
         // console.log($('foreach').attr('key'));
-
 
         $('foreach').filter(
             function(i, el) {
@@ -88,6 +96,9 @@ class HtmlPreprocessor {
         return $.html();
     }
 
+    /*
+        
+    */
     static getNestedValue(obj, key) {
         return key.split(".").reduce(function(result, key) {
            return result[key] 
