@@ -18,6 +18,15 @@ app.get('/home', (request) => {
     });
 });
 
+app.get('/results', (request, params) => {
+    return showPage('./pages/search.html', {
+        searchTitle: 'Search results',
+        videos: DB.videosByTitle(params.search)
+    
+    });
+});
+
+
 app.get('/createTestVideo', (request, params) => {
     var id = DB.createVideo(params.title, params.description);
     return showPage('./pages/debug.html', {debug: 'Created video:\tid:' + id + '\ttitle:' + params.title + '\tdescription:' + params.description});
