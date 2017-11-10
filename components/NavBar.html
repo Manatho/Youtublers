@@ -1,9 +1,27 @@
 <div class="navbar">
-    <img class="logo" src="/images/youtublers_logo.svg" />
-    <form class="search-form" action="#">
-        <input class "searchbar" type="text">
+    <a href="/home"><img class="logo" src="/images/youtublers_logo.svg" /></a>
+    <form class="search-form" action="/results">
+        <input class "searchbar" type="text" name="search" id="inputfield">
         <input class="btn btn-default" type="submit" value="Search" />
     </form>
     <button class="btn">User</button>
     <button class="btn">Upload video</button>
+
+    <script type="text/javascript">
+        function getUrlParameterValue(name) {
+
+            parameterString = window.location.search.substring(1);
+            parameters = parameterString.split("&");
+
+            for (i = 0; i < parameters.length; i++) {
+                var parameter = parameters[i].split("=");
+                if (parameter[0] == name) {
+                    return parameter[1];
+                }
+            }
+            return "";
+        }
+        document.getElementById("inputfield").value = getUrlParameterValue("search");
+    </script>
+
 </div>

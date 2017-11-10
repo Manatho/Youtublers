@@ -81,6 +81,13 @@ class DB{
         return rows;
     }
 
+    static videosByTitle(title){
+        sql.connect(dbfile);
+        var rows = sql.run('SELECT * FROM videos WHERE title LIKE ?', ['%'+title+'%']);
+        sql.close();
+        return rows;
+    }
+
     static createVideo(title, description, user_id){
         var id = shortid.generate();
         sql.connect(dbfile);
