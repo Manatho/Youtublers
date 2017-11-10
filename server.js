@@ -12,6 +12,7 @@ var app = new TinyRouter();
 
 app.get('/home', (request) => {
     return showPage('./pages/home.html', {
+        searchTitle: 'Most viewed',
         Fisk: 'FUCKING OP',
         videos: DB.videos()
     });
