@@ -35,18 +35,20 @@ class HtmlPreprocessor {
     static fileInjection(html) {
         var $ = cheerio.load(html);
 
-        $('import').each((index,element) =>{
-            var fileName = element.attribs.file;
-            if(fs.existsSync(fileName))
-            {
-                var file = fs.readFileSync(fileName);
-                $(element).replaceWith(file.toString());
-            }
-            else
-            throw("File: '" + fileName + "' not found!")
-
-        })
-
+        
+        while($('import').length !== 0)
+        {
+            $('import').each((index,element) =>{
+                var fileName = element.attribs.file;
+                if(fs.existsSync(fileName))
+                {
+                    var file = fs.readFileSync(fileName);
+                    $(element).replaceWith(file.toString());
+                }
+                else
+                throw("File: '" + fileName + "' not found!")
+            })
+        }
         return $.html();
     }
 
