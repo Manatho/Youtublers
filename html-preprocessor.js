@@ -52,6 +52,32 @@ class HtmlPreprocessor {
         return $.html();
     }
 
+
+    /*
+        @html: html page as a string
+        @replaceTagWith: Associative array
+            key: tag
+            value: replacement text
+        @return string containing the changed html
+
+        In html replaces the tag <var>tag</var> with the replacement text
+    */
+    static conditionalInjection(html, inputVariables) {
+        var $ = cheerio.load(html);
+
+        $('if').each((index,element) => {
+            var content = $(element).html();
+            var condition = HtmlPreprocessor.getNestedValue(inputVariables, $(element).attr('condition'));
+            if(!condition){
+                $(element).replaceWith('');
+            }else{
+                $(element).replaceWith(content);
+            }
+        });
+        
+        return $.html();
+    }
+
     /*
         @html: html page as a string
         @inputVariables: Associative array
@@ -103,6 +129,7 @@ class HtmlPreprocessor {
     
     static process(html, inputVariables) {
         html = HtmlPreprocessor.fileInjection(html);
+        html = HtmlPreprocessor.conditionalInjection(html, inputVariables);
         html = HtmlPreprocessor.foreachInjection(html, inputVariables);
         html = HtmlPreprocessor.variableInjection(html, inputVariables);
         return html;

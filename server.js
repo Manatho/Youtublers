@@ -13,7 +13,8 @@ app.get('/home', (request) => {
     return showPage('./pages/home.html', {
         searchTitle: 'Most viewed',
         Fisk: 'FUCKING OP',
-        videos: DB.videos()
+        videos: DB.videos(),
+        user: Session.get(request, 'user_id') != undefined
     });
 });
 
