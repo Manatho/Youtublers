@@ -1,13 +1,16 @@
 <div class="navbar">
     <a href="/home"><img class="logo" src="/images/youtublers_logo.svg" /></a>
     <form class="search-form" action="/results">
-        <input class "searchbar" type="text" name="search" id="inputfield">
+        <input class = "search-textinput" type="text" name="search" id="inputfield">
         <input class="btn btn-default" type="submit" value="Search" />
     </form>
     <if condition="user">
         <button class="btn">User</button>
+        <button class="btn">Upload video</button>
     </if>
-    <button class="btn">Upload video</button>
+    <if condition="!user">
+        <button class="btn">Login</button>
+    </if>
 
     <script type="text/javascript">
         function getUrlParameterValue(name) {

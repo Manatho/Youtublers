@@ -67,7 +67,19 @@ class HtmlPreprocessor {
 
         $('if').each((index,element) => {
             var content = $(element).html();
-            var condition = HtmlPreprocessor.getNestedValue(inputVariables, $(element).attr('condition'));
+            var temp = $(element).attr('condition');
+            var condition = true;
+
+            if(temp.charAt(0) == "!")
+            {
+                condition = false;
+                condition = !HtmlPreprocessor.getNestedValue(inputVariables, temp.substring(1));
+            }
+            else
+            {
+                condition = HtmlPreprocessor.getNestedValue(inputVariables, temp);
+            }
+
             if(!condition){
                 $(element).replaceWith('');
             }else{

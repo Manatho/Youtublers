@@ -37,6 +37,10 @@ app.get('/sessionTester', (request, params) => {
     return showPage('./pages/debug.html', {debug: JSON.stringify(Session.load(request))});
 })
 
+app.get('/upload', (request, params) => {
+    return showPage('./pages/upload.html', {});
+})
+
 app.get('/login', (request, params) => {
 
     // THIS SHOULD !NOT! BE A GET REQUEST BUT A POST
@@ -49,6 +53,9 @@ app.get('/login', (request, params) => {
 });
 
 app.post('/upload', (request, fields, files) => {
+    console.log(fields);
+    console.log(files);
+
     var video = files['video'];
     var title = fields['title'];
     var description = fields['description'];
