@@ -7,22 +7,39 @@
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/main.js"></script>
+
+    <script type="text/javascript">
+        $("form#data").submit(function() {
+            
+            console.log("hello");
+                var formData = new FormData(this);
+            
+                $.post($(this).attr("action"), formData, function(data) {
+                    alert(data);
+                });
+            
+                return false;
+            });
+    </script>
+
+
     <title>Home</title>
 </head>
 
 <body>
     <import file="./components/NavBar.html"></import>
     <div class="container">
-        <hr> <hr>
+        <hr>
+        <hr>
         <div class="container-background">
             <h2 class="no-margin">Upload your video</h2>
             <hr>
-            <form class="upload-container" action="/upload" method="post" enctype="multipart/form-data">
+            <form id="data" class="upload-container" action="/upload" method="post" enctype="multipart/form-data">
                 <div class="upload-imageinput">
                     <label for="file-input">
                         <img src="/images/fileuploadicon.png" />
                     </label>
-                    <input id="file-input" type="file" size="1000000000" required>
+                    <input id="file-input" name="video" type="file" size="100M" required>
                 </div>
 
                 <div style="width:100%">
