@@ -70,6 +70,11 @@ app.get('/login', (request, params) => {
     return showPage('./pages/login.html', {});
 });
 
+app.get('/createuser', (request, params) => {
+    
+        return showPage('./pages/createuser.html', {});
+    });
+
 app.post('/upload', (request, fields, files) => {
 
     var video = files['video'];
@@ -100,6 +105,14 @@ app.post('/login', (request, fields, files) => {
         return JSON.stringify({ status: 'error', message: 'Invalid password or username' });
 
 
+});
+
+app.post('/createuser', (request, fields, files) => {
+    var username = fields['username'];
+    var password = sha(fields['password']);
+
+    DB.createUser(username, password);
+    return JSON.stringify({ status: 'success' });
 });
 
 function showPage(path, vars) {

@@ -70,7 +70,7 @@ class DB{
 
     static createUser(username, password){
         sql.connect(dbfile);
-        sql.run("INSERT INTO users VALUES (?, ?)", [username, password]);
+        sql.run("INSERT INTO users(username,password) VALUES (?, ?)", [username, password]);
         sql.close();
     }
 
