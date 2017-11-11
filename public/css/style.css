@@ -42,7 +42,10 @@ body{
 
   }
 
-
+  a{
+      text-decoration: none;
+      color: #333;
+  }
   .container-background{
 
     background: #FFF;
@@ -89,7 +92,9 @@ img.logo{
     background-color:  #EEEEEE;
     border: none;
 
-    height: 2.3rem;
+    font-size: 0.9em;
+
+    height: 1rem;
 
     margin-right: 1%;
     border-radius: 2px;
@@ -148,6 +153,7 @@ img.logo{
 .btn-default{
     background-color: #00AEEF;
     border: none;
+    height: 2.3rem;
 
     color: #FFF;
     font-weight: 700;
@@ -206,8 +212,22 @@ img.logo{
 
 .upload-imageinput > input
 {
+    show: none;
+}
+
+.login-container{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+
+
+    height: 200px;
+    width: 90%;
+    margin: 5% 5% 5% 5%;
 
 }
+
 
 
 

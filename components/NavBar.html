@@ -5,11 +5,11 @@
         <input class="btn btn-default" type="submit" value="Search" />
     </form>
     <if condition="user">
-        <button class="btn">User</button>
-        <button class="btn">Upload video</button>
+        <a href="/user" class="btn">User</a>
+        <a href="/upload" class="btn">Upload video</a>
     </if>
     <if condition="!user">
-        <button class="btn">Login</button>
+        <a href="/login" class="btn">Login</a>
     </if>
 
     <script type="text/javascript">
