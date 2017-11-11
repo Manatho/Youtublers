@@ -35,10 +35,19 @@ class TinyRouter{
                 });
 
                 request.on('end', () => {
-                    body = qs.parse(body);
+                    
+                    console.log(body.name);
+                    var temp = __dirname+"/test/way.png";
+                    console.log(body);
+
+                    fs.appendFile(temp, body, function(err){
+                        if(err)
+                            return console.log(err);
+                        
+                    })
                      
                     response.writeHead(200, {"Content-Type": "text/html"});
-                    response.write(body['file']);
+                    response.write("test");
                     response.end();
 
                 });

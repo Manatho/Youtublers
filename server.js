@@ -48,6 +48,11 @@ app.get('/login', (request, params) => {
     return JSON.stringify({status: 'success'});
 });
 
+app.post('/test', (request, params) => {
+    
+        
+    });
+
 function showPage(path, vars){
     var file = fs.readFileSync(path);
     file = file.toString();
