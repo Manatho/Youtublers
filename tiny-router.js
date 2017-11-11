@@ -3,6 +3,7 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var mime = require('mime');
+var qs = require('querystring');
 
 class TinyRouter{
 
@@ -20,11 +21,27 @@ class TinyRouter{
             var req = url.parse(request.url, true);
             // console.log('[INFO]\t\''+req.pathname+'\' requested');
             Session.checkFile(request);
-            if(router.getRoutes[req.pathname.toLowerCase()] != undefined){
-                
+
+            
+            if(request.method == "GET" && router.getRoutes[req.pathname.toLowerCase()] != undefined){
                 response.writeHead(200, {"Content-Type": "text/html"});
                 response.write(router.getRoutes[req.pathname.toLowerCase()](request, req.query));
                 response.end();
+            }else if(request.method == "POST" && router.postRoutes[req.pathname.toLowerCase()] != undefined){
+                var body = '';
+                
+                request.on('data', (data) => {
+                    body += data;
+                });
+
+                request.on('end', () => {
+                    body = qs.parse(body);
+                     
+                    response.writeHead(200, {"Content-Type": "text/html"});
+                    response.write(body['file']);
+                    response.end();
+
+                });
             }else{
                 var filepath = './public'+req.pathname;                
                 if(fs.existsSync(filepath)){
