@@ -43,14 +43,6 @@ class DB{
             );
         `);
         sql.run(`
-        CREATE TABLE IF NOT EXISTS subscriptions (
-            user_id integer NOT NULL,
-            subscription_user_id integer NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (user_id, subscription_user_id)
-            );
-        `);
-        sql.run(`
         CREATE TABLE IF NOT EXISTS views (
             user_id integer NOT NULL,
             video_id varchar(8) NOT NULL,
@@ -132,19 +124,6 @@ class DB{
     static createRating(user_id, video_id, rating){
         sql.connect(dbfile);
         sql.run("INSERT INTO ratings VALUES (?, ?, ?)", [user_id, video_id, rating]);
-        sql.close();
-    }
-
-    static subscriptions(){
-        sql.connect(dbfile);
-        var rows = sql.run('SELECT * FROM subscriptions');
-        sql.close();
-        return rows;
-    }
-
-    static createSubscription(user_id, video_id, rating){
-        sql.connect(dbfile);
-        sql.run("INSERT INTO subscriptions VALUES (?, ?)", [user_id, subscription_user_id]);
         sql.close();
     }
 
