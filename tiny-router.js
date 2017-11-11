@@ -1,3 +1,4 @@
+var Session = require('./session.js');
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
@@ -18,10 +19,11 @@ class TinyRouter{
         http.createServer(function(request, response){
             var req = url.parse(request.url, true);
             // console.log('[INFO]\t\''+req.pathname+'\' requested');
-            if(router.getRoutes[req.pathname] != undefined){
+            Session.checkFile(request);
+            if(router.getRoutes[req.pathname.toLowerCase()] != undefined){
                 
                 response.writeHead(200, {"Content-Type": "text/html"});
-                response.write(router.getRoutes[req.pathname](request, req.query));
+                response.write(router.getRoutes[req.pathname.toLowerCase()](request, req.query));
                 response.end();
             }else{
                 var filepath = './public'+req.pathname;                
@@ -43,11 +45,11 @@ class TinyRouter{
     }
 
     get(route, handler) {
-        this.getRoutes[route] = handler;
+        this.getRoutes[route.toLowerCase()] = handler;
     }
 
     post(route, handler) {
-        this.postRoutes[route] = handler;
+        this.postRoutes[route.toLowerCase()] = handler;
     }
 
     printRoutes(){
