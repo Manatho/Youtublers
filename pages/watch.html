@@ -34,6 +34,7 @@
                 <h4 class="no-margin">Add comment</h4>
                 <div class="comment">
                     <div name="comment" id="input" contenteditable="true"></div>
+                    <input type="hidden" id="video_id" value="{{video.id}}">
                     <button class="btn btn-default" id="addComment">Send</button>
                 </div>
             </div>
@@ -48,7 +49,9 @@
     
     <script type="text/javascript">
         $('#addComment').click((event) => {
-
+            $.post('/comment', {video: $('#video_id').val(), comment: $('#input').text()}, (data) => {
+                if(data.status == 'success') alert('Comment sent');
+            });
         });
     </script>
 

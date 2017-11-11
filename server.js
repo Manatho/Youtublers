@@ -51,7 +51,7 @@ app.post('/comment', (request, fields) => {
     var video = DB.videoByID(fields['video']);
     var comment = fields['comment'];
     
-    if(video == undefined || comment == undefined || comment.length > 512) return JSON.stringify({status: 'error', message: 'invalid input'});
+    if(video == undefined || comment == undefined || comment.length > 512 || comment.length == 0) return JSON.stringify({status: 'error', message: 'invalid input'});
 
     console.log(Session.get(request, 'user_id'), comment, video.id);
     DB.createComment(Session.get(request, 'user_id'), comment, video.id);
