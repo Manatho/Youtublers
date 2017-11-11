@@ -32,14 +32,30 @@ app.get('/watch', (request, params) => {
     if(params.v == undefined) return 'invalid request';
 
     var video = DB.videoByID(params.v);
+    var comments = DB.comments(params.v);
+    var rating = DB.rating(params.v);
 
-    console.log(video);
+    console.log(video, comments, rating);
     if(video != undefined){
         return showPage('./pages/watch.html', {
-            video: video
+            video: video,
+            comments: comments,
+            rating: rating,
+            user: Session.get(request, 'user_id') != undefined
         });
     }
     return 'potato request';
+});
+
+app.post('/comment', (request, fields) => {
+    var video = DB.videoByID(fields['video']);
+    var comment = fields['comment'];
+    
+    if(video == undefined || comment == undefined || comment.length > 512) return JSON.stringify({status: 'error', message: 'invalid input'});
+
+    console.log(Session.get(request, 'user_id'), comment, video.id);
+    DB.createComment(Session.get(request, 'user_id'), comment, video.id);
+    return JSON.stringify({status: 'success'});
 });
 
 
@@ -63,8 +79,6 @@ app.get('/login', (request, params) => {
 });
 
 app.post('/upload', (request, fields, files) => {
-    console.log(fields);
-    console.log(files);
 
     var video = files['video'];
     var title = fields['title'];

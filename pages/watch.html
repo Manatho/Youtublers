@@ -29,8 +29,28 @@
                 </div>
             </div>
         </div>
+        <if condition="user">
+            <div class="container-background">
+                <h4 class="no-margin">Add comment</h4>
+                <div class="comment">
+                    <div name="comment" id="input" contenteditable="true"></div>
+                    <button class="btn btn-default" id="addComment">Send</button>
+                </div>
+            </div>
+        </if>
+
+        <div class="container-background">
+            <foreach key="comment" in="comments" tag="div">
+                <import file="./components/Comment.html"></import>  
+            </foreach>
+        </div>
     </div>
     
+    <script type="text/javascript">
+        $('#addComment').click((event) => {
+
+        });
+    </script>
 
 </body>
 

@@ -30,6 +30,7 @@ class DB{
             user_id integer NOT NULL,
             content varchar(512) NOT NULL,
             parent_comment INTEGER,
+            video_id varchar(8) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -84,7 +85,8 @@ class DB{
         sql.connect(dbfile);
         var rows = sql.run('SELECT * FROM videos WHERE id = ? LIMIT 1', [id]);
         sql.close();
-        return rows[0];
+        var video = rows[0];
+        return video;
     }
 
     static createVideo(title, description, user_id){
@@ -97,28 +99,28 @@ class DB{
 
     static comments(video_id){
         sql.connect(dbfile);
-        var rows = sql.run('SELECT * FROM comments WHERE video_id = ? AND parent_comment = NULL', [video_id]);
+        var rows = sql.run(`SELECT c.user_id, ifnull(u.username, 'Unkown user') as username, c.content, c.created_at FROM comments c
+        LEFT JOIN users u ON c.user_id = u.id
+        WHERE c.video_id = ? AND c.parent_comment IS NULL`, [video_id]);
         sql.close();
         return rows;
     }
 
-    static createComment(user_id, content, parent_comment = undefined){
-        var id = shortid.generate();
+    static createComment(user_id, content, video_id, parent_comment = undefined){
         sql.connect(dbfile);
-        if(parent_comment == undefined){
-            sql.run("INSERT INTO comments(user_id, content, parent_comment) VALUES (?, ?, ?)", [user_id, content, parent_comment]);
+        if(parent_comment != undefined){
+            sql.run("INSERT INTO comments(user_id, content, video_id, parent_comment) VALUES (?, ?, ?, ?)", [user_id, content, video_id, parent_comment]);
         }else{
-            sql.run("INSERT INTO comments(user_id, content) VALUES (?, ?)", [user_id, title]);
+            sql.run("INSERT INTO comments(user_id, content, video_id) VALUES (?, ?, ?)", [user_id, content, video_id]);
         }
         sql.close();
-        return id;
     }
 
-    static ratings(){
+    static rating(video_id){
         sql.connect(dbfile);
-        var rows = sql.run('SELECT * FROM ratings');
+        var rating = sql.run('SELECT SUM(rating) as total from ratings WHERE video_id = ?', [video_id]);
         sql.close();
-        return rows;
+        return rating.total == undefined ? 0 : rating.total;
     }
 
     static createRating(user_id, video_id, rating){

@@ -25,7 +25,7 @@ body{
 }
 
 .float-right{
-    float:right;
+    float: right;
 }
 
 .float-left{
@@ -38,6 +38,7 @@ body{
     flex-direction: column;
 
     width: 70%;
+    max-width: 1000px;
     margin: auto;
 
   }
@@ -48,7 +49,7 @@ body{
     background: #FFF;
     padding: 15px;
     margin: 10px;
-    box-shadow: 0px 0px 2px 2px #CCC;
+    box-shadow: 0px 0px 2px 2px #e8e8e8;
   }
 
 
@@ -59,7 +60,7 @@ body{
     
     margin-bottom: 10px;
     flex-wrap: nowrap;
-    box-shadow: 0px 0px 1px 1px #CCC;
+    box-shadow: 0px 0px 1px 1px #e8e8e8;
   }
 
   .videoresult-image{
@@ -70,7 +71,7 @@ body{
     background-color: rgb(53, 157, 255);
     width: 3%;
     height: 100%;
-    box-shadow: 0px 1px 2px 0px #CCC, 0px -1px 2px -0px #CCC ;
+    box-shadow: 0px 1px 2px 0px #CCC, 0px -1px 2px -0px #e8e8e8 ;
   }
 
   .videoresult-content{
@@ -94,7 +95,7 @@ img.logo{
     margin-right: 1%;
     border-radius: 2px;
     padding: 0.7rem;
-    box-shadow: 0px 3px 2px -2px #CCC;
+    box-shadow: 0px 3px 2px -2px #e8e8e8;
     transition: all 0.3s linear;
     
 }
@@ -123,7 +124,7 @@ img.logo{
     font-size: 1.2rem;
     font-weight: lighter;
     
-    box-shadow: 3px 3px 2px -2px #DDD;
+    box-shadow: 3px 3px 2px -2px #e8e8e8;
 
 }
 
@@ -166,7 +167,7 @@ img.logo{
     height: 60px;
 
     background-color: #FFF;
-    box-shadow: 0px 3px 2px -2px #CCC;
+    box-shadow: 0px 3px 2px -2px #e8e8e8;
 }
 
 
@@ -219,3 +220,30 @@ img.logo{
 
 }
 
+.comment{
+    width: 100%;
+    clear: both;
+    display: flex;
+    margin-top: 1rem;
+}
+
+.comment #input{
+    width: 80%;
+    background: #fafafa;
+    vertical-align: middle;
+    padding: 0.5rem;
+}
+
+.comment #addComment{
+    width: 20%;
+}
+
+.user-info{
+    width: 12rem;
+    margin-right: 2rem;
+    display: block;
+}
+
+ul.unstyled{
+    list-style: none;
+}
