@@ -72,9 +72,12 @@ app.post('/upload', (request, fields, files) => {
 
     if(video == undefined || video.type != 'video/mp4') return JSON.stringify({status: 'error', message: 'video incorrect format or missing!'});
     if( (title == undefined || title.length > 50) || (description == undefined || description.length > 255)) return JSON.stringify({status: 'error', message: 'title and description missing or too long'});
-    fs.rename(video.path, './public/videos/'+DB.createVideo(title, description, 1)+'.mp4')
+    
+    var id = DB.createVideo(title, description, 1);
+    
+    fs.rename(video.path, './public/videos/'+id+'.mp4')
 
-    return JSON.stringify({status: 'success'});
+    return JSON.stringify({status: 'success', video: id });
     });
 
 function showPage(path, vars){
