@@ -27,9 +27,19 @@ app.get('/results', (request, params) => {
 });
 
 
-app.get('/createTestVideo', (request, params) => {
-    var id = DB.createVideo(params.title, params.description);
-    return showPage('./pages/debug.html', {debug: 'Created video:\tid:' + id + '\ttitle:' + params.title + '\tdescription:' + params.description});
+app.get('/watch', (request, params) => {
+
+    if(params.v == undefined) return 'invalid request';
+
+    var video = DB.videoByID(params.v);
+
+    console.log(video);
+    if(video != undefined){
+        return showPage('./pages/watch.html', {
+            video: video
+        });
+    }
+    return 'potato request';
 });
 
 
