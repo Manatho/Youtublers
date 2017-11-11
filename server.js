@@ -13,7 +13,6 @@ var app = new TinyRouter();
 app.get('/home', (request) => {
     return showPage('./pages/home.html', {
         searchTitle: 'Most viewed',
-        Fisk: 'FUCKING OP',
         videos: DB.videos(),
         user: Session.get(request, 'user_id') != undefined
     });
@@ -36,7 +35,6 @@ app.get('/watch', (request, params) => {
     var comments = DB.comments(params.v);
     var rating = DB.rating(params.v);
 
-    console.log(video, comments, rating);
     if(video != undefined){
         return showPage('./pages/watch.html', {
             video: video,
@@ -54,7 +52,6 @@ app.post('/comment', (request, fields) => {
     
     if(video == undefined || comment == undefined || comment.length > 512 || comment.length == 0) return JSON.stringify({status: 'error', message: 'invalid input'});
 
-    console.log(Session.get(request, 'user_id'), comment, video.id);
     DB.createComment(Session.get(request, 'user_id'), comment, video.id);
     return JSON.stringify({status: 'success'});
 });
@@ -93,9 +90,11 @@ app.post('/login', (request, fields, files) => {
     var username = fields['username'];
     var password = sha(fields['password']);
 
-    if (DB.ValidateUser(username, password)) {
-        sessionStorage.setItem(request, username, 1);
-        return JSON.stringify({ status: 'success', video: id });
+    var user = DB.ValidateUser(username, password);
+
+    if (user) {
+        Session.set(request, 'user_id', user.id);
+        return JSON.stringify({ status: 'success', message: 'You are now logged in, redirecting...'});
     }
     else
         return JSON.stringify({ status: 'error', message: 'Invalid password or username' });

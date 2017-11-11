@@ -63,8 +63,7 @@ class DB{
 
     static ValidateUser(username, password){
         sql.connect(dbfile);
-        var result = sql.run('SELECT * FROM users WHERE ? = username AND ? = password', [username, password]).length == 1;
-        
+        var result = sql.run('SELECT * FROM users WHERE ? = username AND ? = password', [username, password])[0];
         sql.close();
         return result;
     }
