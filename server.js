@@ -21,7 +21,8 @@ app.get('/home', (request) => {
 app.get('/results', (request, params) => {
     return showPage('./pages/search.html', {
         searchTitle: 'Search results',
-        videos: DB.videosByTitle(params.search)
+        videos: DB.videosByTitle(params.search),
+        user: Session.get(request, 'user_id') != undefined
 
     });
 });
@@ -62,7 +63,11 @@ app.get('/sessionTester', (request, params) => {
 })
 
 app.get('/upload', (request, params) => {
-    return showPage('./pages/upload.html', {});
+    if(Session.get(request, 'user_id') != undefined)
+        return showPage('./pages/upload.html', {user: Session.get(request, 'user_id') != undefined});
+    
+    return showPage('./pages/403.html', {});
+
 })
 
 app.get('/login', (request, params) => {
@@ -76,6 +81,7 @@ app.get('/createuser', (request, params) => {
     });
 
 app.post('/upload', (request, fields, files) => {
+
 
     var video = files['video'];
     var title = fields['title'];
@@ -92,6 +98,7 @@ app.post('/upload', (request, fields, files) => {
 });
 
 app.post('/login', (request, fields, files) => {
+
     var username = fields['username'];
     var password = sha(fields['password']);
 
