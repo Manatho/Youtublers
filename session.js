@@ -43,7 +43,11 @@ class Session{
     }
 
     static clearAll(){
+        
         var folder = './sessions/';
+
+        if(!fs.existsSync(folder)) fs.mkdirSync(folder);
+        
         var files = fs.readdirSync(folder);
 
         for(let file of files){
