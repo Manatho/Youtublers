@@ -48,9 +48,16 @@ app.get('/login', (request, params) => {
     return JSON.stringify({status: 'success'});
 });
 
-app.post('/test', (request, params) => {
-    
-        
+app.post('/upload', (request, fields, files) => {
+    var video = files['video'];
+    var title = fields['title'];
+    var description = fields['description'];
+
+    if(video == undefined || video.type != 'video/mp4') return JSON.stringify({status: 'error', message: 'video incorrect format or missing!'});
+    if( (title == undefined || title.length > 50) || (description == undefined || description.length > 255)) return JSON.stringify({status: 'error', message: 'title and description missing or too long'});
+    fs.rename(video.path, './public/videos/'+DB.createVideo(title, description, 1)+'.mp4')
+
+    return JSON.stringify({status: 'success'});
     });
 
 function showPage(path, vars){

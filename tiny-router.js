@@ -19,6 +19,12 @@ class TinyRouter {
 
         var router = this;
 
+        try {
+            fs.mkdirSync('./temp/');
+        } catch (error) {
+            
+        }
+
         http.createServer(function (request, response) {
             var req = url.parse(request.url, true);
             // console.log('[INFO]\t\''+req.pathname+'\' requested');
@@ -31,14 +37,13 @@ class TinyRouter {
                 response.end();
             } else if (request.method == "POST" && router.postRoutes[req.pathname.toLowerCase()] != undefined) {
 
-                // parse a file upload 
                 var form = new formidable.IncomingForm();
-                form.uploadDir = __dirname + "/test";
+                form.uploadDir = __dirname + "/temp";
 
                 form.parse(request, function (err, fields, files) {
                     response.writeHead(200, { 'content-type': 'text/plain' });
-                    response.write('received upload:\n\n');
-                    response.end(util.inspect({ fields: fields, files: files }));
+                    response.write(router.postRoutes[req.pathname.toLowerCase()](request, fields, files));
+                    response.end();
                 });
 
             } else {
