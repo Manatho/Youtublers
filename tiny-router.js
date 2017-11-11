@@ -1,66 +1,56 @@
 var Session = require('./session.js');
-var http = require('http');
+var formidable = require('formidable'),
+    http = require('http'),
+    util = require('util');
 var url = require('url');
 var fs = require('fs');
 var mime = require('mime');
-var qs = require('querystring');
 
-class TinyRouter{
 
-    constructor(){
+class TinyRouter {
+
+    constructor() {
         console.log("TinyRouter Created");
         this.getRoutes = [];
         this.postRoutes = [];
     }
 
-    listen(port){
+    listen(port) {
 
         var router = this;
 
-        http.createServer(function(request, response){
+        http.createServer(function (request, response) {
             var req = url.parse(request.url, true);
             // console.log('[INFO]\t\''+req.pathname+'\' requested');
             Session.checkFile(request);
 
-            
-            if(request.method == "GET" && router.getRoutes[req.pathname.toLowerCase()] != undefined){
-                response.writeHead(200, {"Content-Type": "text/html"});
+
+            if (request.method == "GET" && router.getRoutes[req.pathname.toLowerCase()] != undefined) {
+                response.writeHead(200, { "Content-Type": "text/html" });
                 response.write(router.getRoutes[req.pathname.toLowerCase()](request, req.query));
                 response.end();
-            }else if(request.method == "POST" && router.postRoutes[req.pathname.toLowerCase()] != undefined){
-                var body = '';
-                
-                request.on('data', (data) => {
-                    body += data;
+            } else if (request.method == "POST" && router.postRoutes[req.pathname.toLowerCase()] != undefined) {
+
+                // parse a file upload 
+                var form = new formidable.IncomingForm();
+                form.uploadDir = __dirname + "/test";
+
+                form.parse(request, function (err, fields, files) {
+                    response.writeHead(200, { 'content-type': 'text/plain' });
+                    response.write('received upload:\n\n');
+                    response.end(util.inspect({ fields: fields, files: files }));
                 });
 
-                request.on('end', () => {
-                    
-                    console.log(body.name);
-                    var temp = __dirname+"/test/way.png";
-                    console.log(body);
-
-                    fs.appendFile(temp, body, function(err){
-                        if(err)
-                            return console.log(err);
-                        
-                    })
-                     
-                    response.writeHead(200, {"Content-Type": "text/html"});
-                    response.write("test");
-                    response.end();
-
-                });
-            }else{
-                var filepath = './public'+req.pathname;                
-                if(fs.existsSync(filepath)){
+            } else {
+                var filepath = './public' + req.pathname;
+                if (fs.existsSync(filepath)) {
                     var type = mime.getType(filepath);
                     if (!response.getHeader('content-type')) {
                         response.setHeader('Content-Type', type);
                         response.write(fs.readFileSync(filepath));
                         response.end();
                     }
-                }else{
+                } else {
                     response.writeHead(404, "Page or Resource not found. 404");
                     response.end();
                 }
@@ -78,7 +68,7 @@ class TinyRouter{
         this.postRoutes[route.toLowerCase()] = handler;
     }
 
-    printRoutes(){
+    printRoutes() {
         console.log('GET:');
         console.log(this.getRoutes);
         console.log('-------------------------------');
