@@ -24,6 +24,14 @@ body{
     text-align: center;
 }
 
+.float-right{
+    float:right;
+}
+
+.float-left{
+    float: left;
+}
+
 
 .container {
     display: flex;
@@ -201,4 +209,13 @@ img.logo{
 
 }
 
+
+
+/* Watch page */
+
+.video{
+    width: 98%;
+    margin: 10px;
+
+}
 

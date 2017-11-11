@@ -14,6 +14,16 @@ class HtmlPreprocessor {
         In html replaces the tag <var>tag</var> with the replacement text
     */
     static variableInjection(html, inputVariables) {
+
+        var reg = /{{+([\w\d]+(\.?))+}}/g; 
+        var matches = html.match(reg); 
+ 
+        if(matches != null) 
+        for(let i = 0; i < matches.length; i++){ 
+            var key = matches[i]; 
+            html = html.replace(key, HtmlPreprocessor.getNestedValue(inputVariables, key.replace('{{', '').replace('}}', ''))); 
+        } 
+ 
         var $ = cheerio.load(html);
 
         $('var').each((index,element) => {
