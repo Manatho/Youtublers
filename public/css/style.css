@@ -267,3 +267,8 @@ img.logo{
 ul.unstyled{
     list-style: none;
 }
+
+
+.row{
+    width: 100%;
+}

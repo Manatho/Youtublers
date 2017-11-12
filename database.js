@@ -127,12 +127,12 @@ class DB{
         sql.connect(dbfile);
         var rating = sql.run('SELECT SUM(rating) as total from ratings WHERE video_id = ?', [video_id]);
         sql.close();
-        return rating.total == undefined ? 0 : rating.total;
+        return rating[0];
     }
 
     static createRating(user_id, video_id, rating){
         sql.connect(dbfile);
-        sql.run("INSERT INTO ratings VALUES (?, ?, ?)", [user_id, video_id, rating]);
+        sql.run("INSERT OR REPLACE INTO ratings (user_id, video_id, rating) VALUES (?, ?, ?)", [user_id, video_id, rating]);
         sql.close();
     }
 

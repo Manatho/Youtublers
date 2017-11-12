@@ -34,7 +34,9 @@ app.get('/watch', (request, params) => {
 
     var video = DB.videoByID(params.v);
     var comments = DB.comments(params.v);
-    var rating = DB.rating(params.v);
+    var rating = DB.rating(params.v).total;
+
+    if(typeof(rating) != 'number') rating = 0;
 
     if(video != undefined){
         return showPage('./pages/watch.html', {
@@ -48,15 +50,33 @@ app.get('/watch', (request, params) => {
 });
 
 app.post('/comment', (request, fields) => {
+
+    if(!checkLogin(request)) return JSON.stringify({status: 'unauthenticated'});
+
     var video = DB.videoByID(fields['video']);
     var comment = fields['comment'];
     
     if(video == undefined || comment == undefined || comment.length > 512 || comment.length == 0) return JSON.stringify({status: 'error', message: 'invalid input'});
 
     DB.createComment(Session.get(request, 'user_id'), comment, video.id);
-    return JSON.stringify({status: 'success'});
+    return JSON.stringify({status: 'success', comment: DB.comments(video.id).slice(-1)[0]});
 });
 
+app.post('/rating', (request, fields) => {
+
+    if(!checkLogin(request)) return JSON.stringify({status: 'unauthenticated'});
+
+    var video = DB.videoByID(fields['video']);
+    var rating = Math.min(Math.max(fields['rating'], -1), 1);
+
+    if(video == undefined) return JSON.stringify({status: 'error', message: 'video not found'});
+
+    DB.createRating(Session.get(request, 'user_id'), video.id, rating);
+
+    var newRating = DB.rating(video.id).total;
+
+    return JSON.stringify({status: 'success', newRating: newRating});
+});
 
 app.get('/sessionTester', (request, params) => {
     return showPage('./pages/debug.html', { debug: JSON.stringify(Session.load(request)) });
@@ -82,6 +102,8 @@ app.get('/createuser', (request, params) => {
 
 app.post('/upload', (request, fields, files) => {
 
+
+    if(!checkLogin(request)) return JSON.stringify({status: 'unauthenticated'});
 
     var video = files['video'];
     var title = fields['title'];
@@ -115,12 +137,17 @@ app.post('/login', (request, fields, files) => {
 });
 
 app.post('/createuser', (request, fields, files) => {
+    
     var username = fields['username'];
     var password = sha(fields['password']);
 
     DB.createUser(username, password);
     return JSON.stringify({ status: 'success' });
 });
+
+function checkLogin(request){
+    return (Session.get(request, 'user_id') != undefined);
+}
 
 function showPage(path, vars) {
     var file = fs.readFileSync(path);
