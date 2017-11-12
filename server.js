@@ -10,6 +10,14 @@ DB.initialize();
 
 var app = new TinyRouter();
 
+app.get('/', (request) => {
+    return showPage('./pages/home.html', {
+        searchTitle: 'Most viewed',
+        videos: DB.videos(),
+        user: Session.get(request, 'user_id') != undefined
+    });
+});
+
 app.get('/home', (request) => {
     return showPage('./pages/home.html', {
         searchTitle: 'Most viewed',
