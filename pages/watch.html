@@ -1,0 +1,101 @@
+<html lang="en">
+
+<head>
+    <import file="./components/HeaderProperties.html"></import>
+    <title>Home</title>
+</head>
+
+<body>
+    <import file="./components/NavBar.html"></import>
+    
+
+    <div class="container">
+        <video class="video" controls autoplay>
+            <source src="/videos/{{video.id}}.mp4" type="video/mp4">
+        </video>
+        <div class="container-background">
+            <div>
+                <div class="float-right">
+                    <div class="row">rating: <span id="rating"><var>rating</var></span></div>
+                    <div class="row">
+                            <a href="#" id="dislike" class="float-left" style="padding:.33rem;color:#e74c3c;"><i class="material-icons">thumb_down</i></a>
+                            <a href="#" id="like" class="float-left" style="padding:.33rem;color:#2ecc71;"><i class="material-icons">thumb_up</i></a>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="no-margin"><var>video.title</var></h2>
+                    <p><var>video.description</var></p>
+                </div>
+            </div>
+        </div>
+        <if condition="user">
+            <div class="container-background">
+                <h4 class="no-margin">Add comment</h4>
+                <div class="comment">
+                    <div name="comment" id="input" contenteditable="true"></div>
+                    <input type="hidden" id="video_id" value="{{video.id}}">
+                    <button class="btn btn-default" id="addComment">Send</button>
+                </div>
+            </div>
+        </if>
+
+        <div class="container-background" id="comment-container">
+            <div class="comment" id="placeholder-comment">
+                <div class="user-info float-left">
+                    <ul class="unstyled">
+                        <li id="username"></li>
+                        <li id="timestamp"></li>
+                    </ul>
+                </div>
+                <div class="float-left" id="content">
+                    
+                </div>
+            </div>
+            <foreach key="comment" in="comments" tag="div">
+                <import file="./components/Comment.html"></import>  
+            </foreach>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        $('#addComment').click((event) => {
+            $.post('/comment', {video: $('#video_id').val(), comment: $('#input').text()}, (data) => {
+                data = JSON.parse(data);
+                if(data.status == 'success'){
+                    var comment = $('#placeholder-comment').clone();
+                    console.log(data.user);
+                    comment.find('#username').text(data.comment.username);
+                    comment.find('#timestamp').text(data.comment.created_at);
+                    comment.find('#content').text(data.comment.content);
+                    $('#input').text('');
+                    comment.appendTo($('#comment-container'));
+                }
+            });
+        });
+
+        $('#like').click((event) => {
+            $.post('/rating', {video: $('#video_id').val(), rating: 1}, (data) => {
+                data = JSON.parse(data);
+                if(data.status == 'unauthenticated'){
+                    alert('please login to rate videos');
+                }else{
+                    $('#rating').text(data.newRating);
+                }
+            });
+        });
+
+        $('#dislike').click((event) => {
+            $.post('/rating', {video: $('#video_id').val(), rating: -1}, (data) => {
+                data = JSON.parse(data);
+                if(data.status == 'unauthenticated'){
+                    alert('please login to rate videos');
+                }else{
+                    $('#rating').text(data.newRating);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<html lang="en">
+
+<head>
+    <import file="./components/HeaderProperties.html"></import>
+    <title>Home</title>
+</head>
+
+<body>
+    <import file="./components/NavBar.html"></import>
+    <div class="container">
+        <hr>
+        <hr>
+        <div class="container-background">
+            <h2 class="no-margin">Upload your video</h2>
+            <hr>
+            <form id="data" class="upload-container" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="upload-imageinput">
+                    <label for="file-input">
+                        <img src="/images/fileuploadicon.png" />
+                    </label>
+                    <input id="file-input" name="video" type="file" size="100M" required>
+                </div>
+
+                <div style="width:100%">
+                    <input class="upload-textinput" type="text" name="title" placeholder="Video Name" required>
+                    <hr>
+                    <textarea class="upload-textinput" rows="7" name="description" placeholder="Description" required></textarea>
+                    <input class="btn btn-default" style="margin-top: 10px; float:right;" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $("form#data").submit(function() {
+            
+            var formData = new FormData($(this)[0]);
+
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                async: false,
+                success: function (data) {
+                    data = JSON.parse(data)
+                    var newurl = '/watch?v='+data.video;
+                    window.location = newurl;
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        
+            return false;
+        });
+    </script>
+
+</body>
+
+</html>

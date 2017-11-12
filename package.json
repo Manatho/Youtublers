@@ -1,0 +1,28 @@
+{
+  "name": "youtublers",
+  "version": "1.0.0",
+  "description": "Where peoplers can subscribbs to chanslers",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manatho/Youtublers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manatho/Youtublers/issues"
+  },
+  "homepage": "https://github.com/Manatho/Youtublers#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "formidable": "^1.1.1",
+    "jquery": "^3.2.1",
+    "mime": "^2.0.3",
+    "sha1": "^1.1.1",
+    "shortid": "^2.2.8",
+    "sqlite-sync": "^0.3.6"
+  }
+}

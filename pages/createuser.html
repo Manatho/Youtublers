@@ -1,0 +1,55 @@
+<html lang="en">
+    
+    <head>
+        <import file="./components/HeaderProperties.html"></import>
+        <title>Home</title>
+    </head>
+    
+    <body>
+        <import file="./components/NavBar.html"></import>
+        <div class="container">
+            <hr>
+            <hr>
+            <div class="container-background">
+                <h2 class="no-margin">Create new account</h2>
+                <hr>
+                <form id="data" class="login-container" action="/upload" method="post" enctype="multipart/form-data">
+                    <div style="width:80%; margin: auto;">
+                        <input class="upload-textinput" type="text" name="username" placeholder="Username" required>
+                        <hr>
+                        <input class="upload-textinput" type="password" name="password" placeholder="Password" required>
+                        <input class="btn btn-default" style="margin-top: 10px;" type="submit" value="Create">
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+    
+        <script type="text/javascript">
+            $("form#data").submit(function () {
+    
+                var formData = new FormData($(this)[0]);
+    
+                $.ajax({
+                    url: '/createuser',
+                    type: 'POST',
+                    data: formData,
+                    async: false,
+                    success: function (data) {
+                        data = JSON.parse(data)
+                        
+                        if(data.status == "success")
+                            window.location = '/login';
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+    
+                return false;
+            });
+        </script>
+    
+    </body>
+    
+    </html>
